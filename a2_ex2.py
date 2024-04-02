@@ -3,14 +3,13 @@ from PIL import Image
 from a2_ex1 import to_grayscale
 import math
 
-# prepare_image -> tuple[np.ndarray, np.ndarray]
 def prepare_image(image: np.ndarray,
                   width: int,
                   height: int,
                   x: int,
                   y: int,
-                  size: int):
-    # 1, 1280, 960
+                  size: int) -> tuple[np.ndarray, np.ndarray]:
+    
     #Checks
     if image.shape[0] != 1 or image.ndim != 3:
         raise ValueError
@@ -31,9 +30,11 @@ def prepare_image(image: np.ndarray,
         #equaly adding pixels to the left and right
         resized = np.pad(resized, pad_width=((0,0), (0,0), (math.floor(width/2), math.ceil(width/2))), mode="edge")
     else:
+        start_height = math.ceil((image.shape[1]-height)/2)
+        start_width = math.ceil((image.shape[2]-width)/2)
         resized = resized[:, 
-                    math.ceil((image.shape[1]-height)/2):math.ceil((image.shape[1]-height)/2)+height, 
-                    math.ceil((image.shape[2]-width)/2):math.ceil((image.shape[2]-width)/2)+width]
+                    start_height:start_height+height, 
+                    start_width:start_width+width]
     
     #finding subarea
     subarea = resized
